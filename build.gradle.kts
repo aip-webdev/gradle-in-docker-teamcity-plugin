@@ -23,9 +23,9 @@ publishing {
 }
 
 dependencies {
-    testImplementation("org.assertj:assertj-core:3.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
 gradlePlugin {
@@ -35,8 +35,8 @@ gradlePlugin {
         create("gradle-in-docker-ci") {
             id = "io.github.aipwebdev.gradle-in-docker-ci"
             implementationClass = "io.github.aipwebdev.DockerInGradleTeamcityPlugin"
-            displayName = "Plugin to produce test output as Teamcity Service Messages with retry"
-            description = "Produces tests' output in Teamcity Service Message format with retry"
+            displayName = "Plugin to produce test output as Teamcity Service Messages with retry support"
+            description = "Produces tests' output in Teamcity Service Message format"
             tags = listOf("teamcity", "service messages", "docker", "test output", "retry")
         }
     }
