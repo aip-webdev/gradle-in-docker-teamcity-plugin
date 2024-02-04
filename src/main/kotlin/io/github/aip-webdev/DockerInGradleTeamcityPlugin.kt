@@ -1,4 +1,7 @@
-package io.github.aipwebdev
+
+@file:Suppress("ktlint:standard:package-name")
+
+package io.github.`aip-webdev`
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -8,14 +11,14 @@ open class DockerInGradleTeamcityPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension =
             project.extensions.run {
-                create("dockerTeamcity", DockerInGradleTeamcityExtension::class.java)
+                create("gradleInDocker", GradleInDockerTeamcityExtension::class.java)
             }
 
         project.afterEvaluate {
-            val teamcity = getEnvironmentVariable(extension.teamcity)
-            val supportRetry = getEnvironmentVariable(extension.supportRetry) == "true"
-            if (!teamcity.isNullOrEmpty()) {
-                println("Applying TeamcityTestListener with ${extension.teamcity} = $teamcity")
+            val teamcity = extension.teamcity
+            val supportRetry = extension.supportRetry
+            if (teamcity) {
+                println("Applying io.github.`aip-webdev`.TeamcityTestListener with teamcity = true")
                 project.tasks.withType(Test::class.java) { testTask ->
                     testTask.addTestListener(TeamcityTestListener(supportRetry))
                 }

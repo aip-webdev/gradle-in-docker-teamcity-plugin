@@ -1,4 +1,6 @@
-package io.github.aipwebdev
+@file:Suppress("ktlint:standard:package-name")
+
+package io.github.`aip-webdev`
 
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
@@ -8,7 +10,6 @@ import java.io.File
 
 internal class DockerInGradleTeamcityPluginTest {
     private lateinit var tempDir: File
-    private val someVersion = "1.2"
 
     @BeforeEach
     internal fun setUp() {
@@ -17,14 +18,16 @@ internal class DockerInGradleTeamcityPluginTest {
 
     @Test
     internal fun `default envVarName`() {
-        val defaultVarName = "TEAMCITY_VERSION"
-        System.setProperty(defaultVarName, someVersion)
+        val defaultFlag = true
 
         File(tempDir, "build.gradle").run {
             writeText(
                 """
                 plugins {
-                  id "io.github.aipwebdev.gradle-in-docker-ci"
+                  id "io.github.aip-webdev.gradle-in-docker-ci"
+                }
+                gradleInDocker {
+                  teamcity = $defaultFlag
                 }
                 """.trimIndent(),
             )
@@ -38,23 +41,21 @@ internal class DockerInGradleTeamcityPluginTest {
                 .build()
 
         assertThat(buildResult.output)
-            .contains("Applying TeamcityTestListener with $defaultVarName = $someVersion")
+            .contains("Applying io.github.`aip-webdev`.TeamcityTestListener with teamcity = $defaultFlag")
     }
 
     @Test
     internal fun `changed envVarName`() {
-        val changedEnvVarName = "SOME_VAR"
-        System.setProperty(changedEnvVarName, someVersion)
+        val changedFlag = false
 
         File(tempDir, "build.gradle").run {
             writeText(
                 """
                 plugins {
-                  id "io.github.aipwebdev.gradle-in-docker-ci"
+                  id "io.github.aip-webdev.gradle-in-docker-ci"
                 }
-
-                dockerTeamcity {
-                  teamcity = "$changedEnvVarName"
+                gradleInDocker {
+                  teamcity = $changedFlag
                 }
                 """.trimIndent(),
             )
@@ -67,7 +68,7 @@ internal class DockerInGradleTeamcityPluginTest {
                 .withArguments("tasks")
                 .build()
 
-        assertThat(buildResult.output)
-            .contains("Applying TeamcityTestListener with $changedEnvVarName = $someVersion")
+        assertThat("Applying io.github.`aip-webdev`.TeamcityTestListener with teamcity = $changedFlag")
+            .isNotIn(buildResult.output)
     }
 }
